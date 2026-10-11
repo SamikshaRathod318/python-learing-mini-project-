@@ -1,0 +1,57 @@
+*What is Scope in Python?*
+
+Scope means the area of a program where a variable can be accessed or used.
+
+In simple words, scope tells us where we can use a variable in our code.
+
+
+**Types of Scope in Python**
+
+Python has four types of scope, remembered using the LEGB rule.
+
+1. Local Scope
+
+A variable created inside a function. It can normally be used only inside that function.
+
+2. Enclosing Scope
+
+A variable created in an outer function and accessed by an inner function.
+
+3. Global Scope
+
+A variable created outside functions at the module level. It can be accessed throughout that module, unless shadowed by another name.
+
+4. Built-in Scope
+
+Names Python provides automatically, such as print(), len(), sum(), and range().
+
+
+*Interview Questions and Answers:-*
+
+Q1. What is scope in Python?
+
+Scope defines where a variable can be accessed in a program.
+
+Q2. What are the four types of scope?
+
+Local, Enclosing, Global, and Built-in (LEGB).
+
+Q3. What is a local variable?
+
+A variable defined inside a function.
+
+Q4. What is a global variable?
+
+A variable defined at the module level, outside functions.
+
+Q5. What is the global keyword?
+
+It allows a function to assign to a module-level variable.
+
+Q6. What is the nonlocal keyword?
+
+It allows an inner function to assign to a variable in an enclosing function.
+
+Q7. What is the LEGB rule?
+
+It is the order Python uses to search for names: Local, Enclosing, Global, Built-in.
