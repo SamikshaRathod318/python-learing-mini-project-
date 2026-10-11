@@ -17,7 +17,7 @@ def create_account():
 def view_account():
     db = connect()
     cursor = db.cursor()
-    cursor.execute("SELECT FROM accounts")
+    cursor.execute("SELECT * FROM accounts")
     accounts = cursor.fetchall()
     print("ALL Accounts")
     for account in accounts:
