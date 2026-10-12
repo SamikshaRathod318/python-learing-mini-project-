@@ -1,17 +1,48 @@
-import json
+from db_config import connect
+
 
 def load_data():
+    connection = connect()
     try:
-        with open('youtube.txt','r') as file:
-            test = json.load(file)
-            #print(test)
-            return test
-    except FileNotFoundError:
-        return[1,2]
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS videos (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    `time` VARCHAR(100) NOT NULL
+                )
+                """
+            )
+            cursor.execute("SELECT name, `time` FROM videos ORDER BY id")
+            return [
+                {"name": name, "time": time}
+                for name, time in cursor.fetchall()
+            ]
+        finally:
+            cursor.close()
+    finally:
+        connection.close()
+
 
 def save_data_helper(videos):
-    with open('youtube.txt','w') as file:
-        json.dump(videos,file)
+    connection = connect()
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("DELETE FROM videos")
+            if videos:
+                cursor.executemany(
+                    "INSERT INTO videos (name, `time`) VALUES (%s, %s)",
+                    [(video["name"], video["time"]) for video in videos],
+                )
+        finally:
+            cursor.close()
+        connection.commit()
+    finally:
+        connection.close()
+
 
 def list_all_videos(videos):
     print("\n")
@@ -21,11 +52,13 @@ def list_all_videos(videos):
     print("\n")
     print("*" * 70)
 
+
 def add_video(videos):
     name = input("Enter video name: ")
     time = input("Enter video time: ")
     videos.append({"name": name, "time": time})
     save_data_helper(videos)
+
 
 def update_video(videos):
     list_all_videos(videos)
@@ -37,8 +70,8 @@ def update_video(videos):
         time = input("Enter the new video time: ")
 
         videos[index - 1] = {
-            'name': name,
-            'time': time
+            "name": name,
+            "time": time
         }
 
         save_data_helper(videos)
@@ -46,6 +79,7 @@ def update_video(videos):
 
     else:
         print("Invalid index selected")
+
 
 def delete_video(videos):
     list_all_videos(videos)
@@ -59,9 +93,10 @@ def delete_video(videos):
     else:
         print("Invalid video index selected")
 
+
 def main():
     videos = load_data()
-    while  True:
+    while True:
         print("\n Youtube Manager | choose an option")
         print("1.list all youtube video")
         print("2.add youtube video")
@@ -72,19 +107,19 @@ def main():
         choice = input("Enter your choice: ")
 
         match choice:
-            case '1':
+            case "1":
                 list_all_videos(videos)
-            case '2':
+            case "2":
                 add_video(videos)
-            case '3':
+            case "3":
                 update_video(videos)
-            case '4':
+            case "4":
                 delete_video(videos)
-
-            case '5':
+            case "5":
                 break
             case _:
                 print("invalid choice")
+
 
 if __name__ == "__main__":
     main()
